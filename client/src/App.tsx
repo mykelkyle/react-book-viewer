@@ -6,22 +6,22 @@ import { getTocApi, getChapterApi } from "./services/apiService";
 import "./App.css";
 
 function App() {
-  const [toc, setToc] = useState([]);
+  const [toc, setToc] = useState<string[]>([]);
   const [chapterContent, setChapterContent] = useState<string | null>(null);
   const [chapterTitle, setChapterTitle] = useState<string>("");
 
   useEffect(() => {
-    const fetchToc = async () => {
-      try {
-        const data = await getTocApi();
-        setToc(data.chapters);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-
     fetchToc();
   }, []);
+
+  const fetchToc = async () => {
+    try {
+      const data = await getTocApi();
+      setToc(data.chapters);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const fetchChapter = async (chapterName: string | null) => {
     if (typeof chapterName === "string") {
@@ -29,7 +29,8 @@ function App() {
       if (content) {
         setChapterTitle(chapterName);
         setChapterContent(content);
-        console.log(content);
+      } else {
+        console.log("Chapter content could not be found");
       }
     }
   };
